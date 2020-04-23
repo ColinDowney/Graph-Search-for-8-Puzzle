@@ -272,7 +272,7 @@ def random_digits_array():
     return r.reshape(3, 3)
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     d = np.array([[8, 1, 3],
                   [7, 0, 4],
                   [6, 2, 5]], dtype=int)
