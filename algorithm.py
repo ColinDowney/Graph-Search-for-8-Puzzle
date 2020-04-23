@@ -1,10 +1,10 @@
 # coding: utf-8
 import copy
-from queue import PriorityQueue, SimpleQueue
 import numpy as np
 import random
 from collections import deque
 import sys
+import unittest
 
 
 class Node(object):
@@ -96,12 +96,18 @@ class GraphSearch(object):
             执行失败未找到解或出错则返回空列表.
         """
         # try:
+        # 检查初始状态是否是八数码
+        if set(self.digits.flatten()) != set(range(9)):
+            raise ValueError('传入的矩阵不是0-8数码的矩阵')
+
         expand_count = 0
         generate_count = 0
 
         # 将初始节点放入Open表
         blank = self.find_blank(self.digits)  # 查找最初的空格的位置
-        self.open_put(Node(self.digits, np.array(blank), cost=0))
+        root = Node(self.digits, np.array(blank), cost=0)
+        root.cost = self.cal_cost(root)
+        self.open_put(root)
         generate_count += 1
 
         while not self.open_empty():
@@ -135,16 +141,14 @@ class GraphSearch(object):
         else:
             return 0
 
-    def close_put(self, node):
-        """ add element to close table """
-        self._close[node.__str__()] = node
-
     def open_empty(self):
         """ check if open is empty """
         return not self._open
 
     def open_pop(self):
-        """ get the head of open queue """
+        """ get the head of open queue
+            从open表取出下一个要扩展的结点
+        """
         return self._open.popleft()
 
     def open_put(self, node):
@@ -169,6 +173,10 @@ class GraphSearch(object):
     def cal_cost(self, node):
         """ 按照算法的要求计算扩展出的搜索结点的耗散值 """
         return node.depth
+
+    def close_put(self, node):
+        """ add element to close table """
+        self._close[node.__str__()] = node
 
     @staticmethod
     def show_path(node):
@@ -203,15 +211,36 @@ class BFSSearch(GraphSearch):
 
 class DFSSearch(GraphSearch):
     """ 深度优先搜索 """
+    def __init__(self, digits_square):
+        super().__init__(digits_square)
+        self._open = []
+
     def open_pop(self):
-        return self._open.popleft()
+        temp = self._open[0]
+        del self._open[0]
+        return temp
+
+    def open_sort(self):
+        # 升序排序
+        sorted(self._open, key=Node.get_cost, reverse=True)
+
+
+class AStarSearch(GraphSearch):
+    """ A*搜索基类 """
+
+    def __init__(self, digits_square):
+        super().__init__(digits_square)
+        self._open = []
+
+    def open_pop(self):
+        temp = self._open[0]
+        del self._open[0]
+        return temp
 
     def open_sort(self):
         # 升序排序
         sorted(self._open, key=Node.get_cost)
 
-
-class AStarSearchW(GraphSearch):
     def update_open_close(self, expand):
         if expand.__str__() in self._close:
             if expand.cost < self._close[expand.__str__()].cost:
@@ -225,24 +254,36 @@ class AStarSearchW(GraphSearch):
         return 0
 
 
+class AStarSearchW(AStarSearch):
+    pass
+
+
+class AStarSearchP(AStarSearch):
+    pass
+
+
+class AStarSearchS(AStarSearch):
+    pass
+
+
 def random_digits_array():
     """ 生成随机的八数码矩阵 """
     r = np.array(random.sample(range(9), 9))
     return r.reshape(3, 3)
 
 
-# if __name__ == 'main':
-d = np.array([[1, 0, 3],
-              [8, 2, 4],
-              [7, 6, 5]], dtype=int)
-g = DFSSearch(d)
-result = g.search()  # expand, generate, final
-if not result:
-    print('fail')
-else:
-    GraphSearch.show_path(result[2])
-    print('扩展结点数：'+result[0].__str__())
-    print('生成结点数：'+result[1].__str__())
+if __name__ == 'main':
+    d = np.array([[8, 1, 3],
+                  [7, 0, 4],
+                  [6, 2, 5]], dtype=int)
+    g = DFSSearch(d)
+    result = g.search()  # expand, generate, final
+    if not result:
+        print('fail')
+    else:
+        GraphSearch.show_path(result[2])
+        print('扩展结点数：'+result[0].__str__())
+        print('生成结点数：'+result[1].__str__())
 
     # class A(object):
     #     def __init__(self, a, b, c):
