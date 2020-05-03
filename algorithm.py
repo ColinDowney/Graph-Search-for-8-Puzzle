@@ -40,11 +40,16 @@ class Node(object):
         digits = ''
         for i in np.nditer(self.digits):
             digits += i.__str__()
-        return digits
+        # return 'Digits:{0}, Cost:{1}'.format(digits, self.cost)
+        return 'Digits:{0}'.format(digits)
 
     def __repr__(self):
         """ The elements of the digits matrix are concatenated into string. """
-        return '<__Node__ {0}>'.format(self.__str__)
+        digits = ''
+        for i in np.nditer(self.digits):
+            digits += i.__str__()
+        # return '<__Node__ {0},{1}>'.format(digits, self.cost)
+        return '<__Node__ {0}>'.format(digits)
 
     #TODO: check the sort direction
     def __cmp__(self, other):
@@ -222,7 +227,7 @@ class DFSSearch(GraphSearch):
 
     def open_sort(self):
         # 升序排序
-        sorted(self._open, key=Node.get_cost, reverse=True)
+        self._open = sorted(self._open, key=Node.get_cost, reverse=True)
 
 
 class AStarSearch(GraphSearch):
@@ -284,6 +289,14 @@ if __name__ == '__main__':
         GraphSearch.show_path(result[2])
         print('扩展结点数：'+result[0].__str__())
         print('生成结点数：'+result[1].__str__())
+    g = BFSSearch(d)
+    result = g.search()  # expand, generate, final
+    if not result:
+        print('fail')
+    else:
+        GraphSearch.show_path(result[2])
+        print('扩展结点数：' + result[0].__str__())
+        print('生成结点数：' + result[1].__str__())
 
     # class A(object):
     #     def __init__(self, a, b, c):
