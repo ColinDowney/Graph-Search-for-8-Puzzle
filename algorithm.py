@@ -136,6 +136,7 @@ class GraphSearch(object):
             self.open_sort()  # 如果open表的结构不会自动排序的话，要重新对open表按照结点的cost值进行排序
         # except Exception:
         #     print('Oops!')
+
         return []
 
     def update_open_close(self, expand):
@@ -186,14 +187,18 @@ class GraphSearch(object):
     @staticmethod
     def show_path(node):
         """ 按照搜索得到的最终结点，一步一步打印解的步骤（输出从下往上看） """
+        step = node.depth
+        print('\n第' + step.__str__() + '步===目标===')
         print(node.digits)
         cur = node.parent
-        step = node.cost
-        while cur is not None:
+        step -= 1
+        while cur.parent is not None:
             print('\n第'+step.__str__()+'步==========')
             print(cur.digits)
             step -= 1
             cur = cur.parent
+        print('\n第' + step.__str__() + '步===初始===')
+        print(cur.digits)
 
     @staticmethod
     def find_blank(digits):
@@ -226,7 +231,7 @@ class DFSSearch(GraphSearch):
         return temp
 
     def open_sort(self):
-        # 升序排序
+        # 降序排序
         self._open = sorted(self._open, key=Node.get_cost, reverse=True)
 
 
@@ -244,7 +249,7 @@ class AStarSearch(GraphSearch):
 
     def open_sort(self):
         # 升序排序
-        sorted(self._open, key=Node.get_cost)
+        self._open = sorted(self._open, key=Node.get_cost)
 
     def update_open_close(self, expand):
         if expand.__str__() in self._close:
@@ -260,15 +265,62 @@ class AStarSearch(GraphSearch):
 
 
 class AStarSearchW(AStarSearch):
-    pass
+    def cal_cost(self, node):
+        """ 耗散值f(n)=g(n)+w(n)，g(n)=depth，w(n)=将牌数不在位数 """
+        return node.depth + self.get_wn(node.digits)
+
+    def get_wn(self, digits):
+        """ 计算w(n) """
+        wn = 0
+        goal_pos = [1, 2, 3, 8, 0, 4, 7, 6, 5]
+        pos = 0
+        for i in range(digits.shape[0]):
+            for j in range(digits.shape[1]):
+                if digits[i][j] != 0 and digits[i][j] != goal_pos[pos]:
+                    wn += 1
+                pos += 1
+        return wn
 
 
 class AStarSearchP(AStarSearch):
-    pass
+    def cal_cost(self, node):
+        """ 耗散值f(n)=g(n)+p(n)，g(n)=depth，p(n)=将牌数不在位的距离和 """
+        return node.depth + self.get_pn(node.digits)
+
+    def get_pn(self, digits):
+        """ 计算p(n) """
+        pn = 0
+        goal_pos = [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0]]
+        for i in range(digits.shape[0]):
+            for j in range(digits.shape[1]):
+                if digits[i][j] != 0:
+                    pos = goal_pos[digits[i][j] - 1]
+                    pn += abs(pos[0] - i) + abs(pos[1] - j)
+        return pn
 
 
-class AStarSearchS(AStarSearch):
-    pass
+class AStarSearchS(AStarSearchP):
+    def cal_cost(self, node):
+        """ 耗散值f(n)=g(n)+p(n)+3s(n)，g(n)=depth，p(n)=将牌数不在位的距离和，s(n)是对节点n中将牌排列顺序的计分值 """
+        return node.depth + self.get_pn(node.digits) + 3 * self.get_sn(node.digits)
+
+    def get_sn(self, digits):
+        """ 计算s(n) """
+        # 前一个是后一个的后继位置，循环
+        after_pos = [[1, 0], [0, 0], [0, 1], [2, 0], [0, 0], [0, 2], [2, 1], [2, 0], [2, 1]]
+        after_value = [8, 1, 2, 3, 4, 5, 6, 7]
+        sn = 0
+        pos = 0
+        for i in range(digits.shape[0]):
+            for j in range(digits.shape[1]):
+                if pos == 4:
+                    if digits[i][j] > 0:
+                        sn += 1
+                elif digits[i][j] != 0:
+                    if after_value[digits[i][j] - 1] != digits[after_pos[pos][0], after_pos[pos][1]]:
+                        sn += 2
+                pos += 1
+        return sn
 
 
 def random_digits_array():
@@ -278,18 +330,42 @@ def random_digits_array():
 
 
 if __name__ == '__main__':
-    d = np.array([[8, 1, 3],
-                  [7, 0, 4],
-                  [6, 2, 5]], dtype=int)
-    g = DFSSearch(d)
-    result = g.search()  # expand, generate, final
-    if not result:
-        print('fail')
-    else:
-        GraphSearch.show_path(result[2])
-        print('扩展结点数：'+result[0].__str__())
-        print('生成结点数：'+result[1].__str__())
-    g = BFSSearch(d)
+    # d = np.array([[8, 1, 3],
+    #               [7, 0, 4],
+    #               [6, 2, 5]], dtype=int)
+    # d = np.array([[2, 8, 3],
+    #               [1, 6, 4],
+    #               [7, 0, 5]], dtype=int)
+    d = np.array([[2, 1, 6],
+                  [4, 0, 8],
+                  [7, 5, 3]], dtype=int)
+
+    # print("w-------------------------------------------------w")
+    # g = AStarSearchW(d)
+    # result = g.search()  # expand, generate, final
+    # if not result:
+    #     print('fail')
+    # else:
+    #     GraphSearch.show_path(result[2])
+    #     print('扩展结点数：' + result[0].__str__())
+    #     print('生成结点数：' + result[1].__str__())
+
+    # print()
+    # print("p-------------------------------------------------p")
+
+    # g = AStarSearchP(d)
+    # result = g.search()  # expand, generate, final
+    # if not result:
+    #     print('fail')
+    # else:
+    #     GraphSearch.show_path(result[2])
+    #     print('扩展结点数：' + result[0].__str__())
+    #     print('生成结点数：' + result[1].__str__())
+
+    print()
+    print("s-------------------------------------------------s")
+
+    g = AStarSearchS(d)
     result = g.search()  # expand, generate, final
     if not result:
         print('fail')
@@ -297,6 +373,23 @@ if __name__ == '__main__':
         GraphSearch.show_path(result[2])
         print('扩展结点数：' + result[0].__str__())
         print('生成结点数：' + result[1].__str__())
+
+    # g = DFSSearch(d)
+    # result = g.search()  # expand, generate, final
+    # if not result:
+    #     print('fail')
+    # else:
+    #     GraphSearch.show_path(result[2])
+    #     print('扩展结点数：'+result[0].__str__())
+    #     print('生成结点数：'+result[1].__str__())
+    # g = BFSSearch(d)
+    # result = g.search()  # expand, generate, final
+    # if not result:
+    #     print('fail')
+    # else:
+    #     GraphSearch.show_path(result[2])
+    #     print('扩展结点数：' + result[0].__str__())
+    #     print('生成结点数：' + result[1].__str__())
 
     # class A(object):
     #     def __init__(self, a, b, c):
