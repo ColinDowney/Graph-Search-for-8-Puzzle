@@ -340,29 +340,6 @@ if __name__ == '__main__':
                   [4, 0, 8],
                   [7, 5, 3]], dtype=int)
 
-    # print("w-------------------------------------------------w")
-    # g = AStarSearchW(d)
-    # result = g.search()  # expand, generate, final
-    # if not result:
-    #     print('fail')
-    # else:
-    #     GraphSearch.show_path(result[2])
-    #     print('扩展结点数：' + result[0].__str__())
-    #     print('生成结点数：' + result[1].__str__())
-
-    # print()
-    # print("p-------------------------------------------------p")
-
-    # g = AStarSearchP(d)
-    # result = g.search()  # expand, generate, final
-    # if not result:
-    #     print('fail')
-    # else:
-    #     GraphSearch.show_path(result[2])
-    #     print('扩展结点数：' + result[0].__str__())
-    #     print('生成结点数：' + result[1].__str__())
-
-    print()
     print("s-------------------------------------------------s")
 
     g = AStarSearchS(d)
@@ -373,23 +350,6 @@ if __name__ == '__main__':
         GraphSearch.show_path(result[2])
         print('扩展结点数：' + result[0].__str__())
         print('生成结点数：' + result[1].__str__())
-
-    # g = DFSSearch(d)
-    # result = g.search()  # expand, generate, final
-    # if not result:
-    #     print('fail')
-    # else:
-    #     GraphSearch.show_path(result[2])
-    #     print('扩展结点数：'+result[0].__str__())
-    #     print('生成结点数：'+result[1].__str__())
-    # g = BFSSearch(d)
-    # result = g.search()  # expand, generate, final
-    # if not result:
-    #     print('fail')
-    # else:
-    #     GraphSearch.show_path(result[2])
-    #     print('扩展结点数：' + result[0].__str__())
-    #     print('生成结点数：' + result[1].__str__())
 
     # class A(object):
     #     def __init__(self, a, b, c):
