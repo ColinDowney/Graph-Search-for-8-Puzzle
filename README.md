@@ -19,12 +19,19 @@ We implement Depth-First Search, Breadth-First Search and A* Algorithm. *For det
 
 ### Class Structure
 
+> 
 > GraphSearch
+> 
 >       |--BFSSearch
+> 
 >       |--DFSSearch
+> 
 >       |--AStarSearch
+> 
 >           |--AStarSearchW
+> 
 >           |--AStarSearchP
+> 
 >           |--AStarSearchS
 
 ### Different h-score
