@@ -350,24 +350,3 @@ if __name__ == '__main__':
         GraphSearch.show_path(result[2])
         print('扩展结点数：' + result[0].__str__())
         print('生成结点数：' + result[1].__str__())
-
-    # class A(object):
-    #     def __init__(self, a, b, c):
-    #         self.a = a
-    #         self.b = b
-    #         self.c = c
-    #
-    #     def __eq__(self, other):
-    #         return self.a == other.a and self.b == other.b
-    #
-    #     def __hash__(self):
-    #         return hash(tuple(sorted({k: self.__dict__[k] for k in ['a', 'b']})))
-    #
-    #     def __repr__(self):
-    #         return self.a.__str__()+self.b.__str__()+self.c.__str__()
-    #
-    #     def C(self):
-    #         return self.c
-    #
-    #     def __cmp__(self, other):
-    #         return self.c < other.c
