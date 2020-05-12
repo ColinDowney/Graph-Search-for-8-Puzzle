@@ -5,11 +5,11 @@ An implementation of DFS graph search, BFS graph search and A* graph search with
 
 **8-Puzzle** is a puzzle divided into 3 rows and 3 columns, containing 8 tiles number from 1 to 8. A tile that is next to the empty space can be moved into the empty space in each step. The aim of the puzzle is to achieve a given configuration of tiles from a given initial state by sliding the tiles. 
 
-<img src="C:\Users\75462\AppData\Roaming\Typora\typora-user-images\image-20200512174202154.png" alt="image-20200512174202154" style="zoom:33%;" />
+<img src="images/puzzle.png" style="zoom:33%;" />
 
 In our program, the goal state is set as this (can set it in algorithm.py->GraphSearch->goal):
 
-<img src="C:\Users\75462\AppData\Roaming\Typora\typora-user-images\image-20200512173058402.png" alt="image-20200512173058402" style="zoom:40%;" />
+<img src="images/target.png" style="zoom:40%;" />
 
 For clarification, we consider the empty space as a tile numbered 0. And instead of moving the tile into empty space, we can swap the tile 0 with its four neighbors.
 
@@ -19,13 +19,14 @@ We implement Depth-First Search, Breadth-First Search and A* Algorithm. *For det
 
 ### Class Structure
 
-`GraphSearch
-  |--BFSSearch
-  |--DFSSearch
-  |--AStarSearch
-      |--AStarSearchW
-      |--AStarSearchP
-      |--AStarSearchS`
+`    
+GraphSearch
+      |--BFSSearch
+      |--DFSSearch
+      |--AStarSearch
+          |--AStarSearchW
+          |--AStarSearchP
+          |--AStarSearchS`
 
 ### Different h-score
 
@@ -39,7 +40,7 @@ Required python 3.*. Required python libraries: Numpy, PySimpleGUI (for GUI).
 
 ## How to use
 
-<img src="C:\Users\75462\AppData\Roaming\Typora\typora-user-images\image-20200512181536859.png" alt="image-20200512181536859" style="zoom:80%;" />
+<img src="images/screenshot.png" style="zoom:80%;" />
 
 Type the number in the puzzle (it should be exactly from number 0 to number 8). Or hit the random button it will create a random generated puzzle. Hit the AllStart to start all the search algorithm in the same time or choose one you would like to run. After the algorithm finished, the results should show below.
 
