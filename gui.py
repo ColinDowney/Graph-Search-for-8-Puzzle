@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import numpy as np
 import algorithm as ag
 import threading
+import sys
 
 
 def bfs_search(digits):
@@ -220,7 +221,10 @@ if __name__ == '__main__':
                 win1.FindElement(key_temp[i] + '_gc').Update("")
 
         elif event == 'Exit':
+            # TODO:停止后台线程
             win1.close()
+            sys.exit()
+            quit()
             break
 
         elif not win2_active and event == '问题':
@@ -270,6 +274,8 @@ if __name__ == '__main__':
                     win3.close()
 
         else:
+            if values is None:
+                break
             for i in values:
                 if values[i] in digits.keys():
                     input_values.append(digits[values[i]])
