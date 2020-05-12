@@ -5,7 +5,7 @@ An implementation of DFS graph search, BFS graph search and A* graph search with
 
 **8-Puzzle** is a puzzle divided into 3 rows and 3 columns, containing 8 tiles number from 1 to 8. A tile that is next to the empty space can be moved into the empty space in each step. The aim of the puzzle is to achieve a given configuration of tiles from a given initial state by sliding the tiles. 
 
-<img src="images/puzzle.png" style="zoom:33%;" />
+<img src="images/puzzle.png" style="zoom:20%;" />
 
 In our program, the goal state is set as this (can set it in algorithm.py->GraphSearch->goal):
 
@@ -19,14 +19,13 @@ We implement Depth-First Search, Breadth-First Search and A* Algorithm. *For det
 
 ### Class Structure
 
-`    
-GraphSearch
-      |--BFSSearch
-      |--DFSSearch
-      |--AStarSearch
-          |--AStarSearchW
-          |--AStarSearchP
-          |--AStarSearchS`
+> GraphSearch
+>       |--BFSSearch
+>       |--DFSSearch
+>       |--AStarSearch
+>           |--AStarSearchW
+>           |--AStarSearchP
+>           |--AStarSearchS
 
 ### Different h-score
 
